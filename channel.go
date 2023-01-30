@@ -1,9 +1,8 @@
 package echo
 
 import (
-	"golang.org/x/exp/slog"
-
 	"github.com/olahol/melody"
+	"golang.org/x/exp/slog"
 )
 
 type channel struct {
@@ -42,9 +41,7 @@ func (c *channel) run() {
 		case s := <-c.enter:
 			c.sessions[s] = true
 		case s := <-c.leave:
-			if _, ok := c.sessions[s]; ok {
-				delete(c.sessions, s)
-			}
+			delete(c.sessions, s)
 		case m := <-c.broadcast:
 			for s := range c.sessions {
 				err := s.Write(m)

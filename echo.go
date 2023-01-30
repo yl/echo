@@ -1,11 +1,11 @@
 package echo
 
 import (
-	"golang.org/x/exp/slog"
 	"net/http"
 	"sync"
 
 	"github.com/olahol/melody"
+	"golang.org/x/exp/slog"
 )
 
 type Echo struct {
@@ -80,7 +80,7 @@ func (e *Echo) Enter(n string, s *melody.Session) {
 }
 
 func (e *Echo) Leave(n string, s *melody.Session) {
-	e.getChannel(n).handleEnter(s)
+	e.getChannel(n).handleLeave(s)
 	s.Set(n, false)
 }
 

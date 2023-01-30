@@ -2,9 +2,9 @@ package echo
 
 import (
 	"encoding/json"
-	"golang.org/x/exp/slog"
 
 	"github.com/olahol/melody"
+	"golang.org/x/exp/slog"
 )
 
 type Message struct {
