@@ -2,11 +2,11 @@ package main
 
 import (
 	"encoding/json"
-	"golang.org/x/exp/slog"
 	"io"
 	"net/http"
 
 	"github.com/yl/echo"
+	"golang.org/x/exp/slog"
 )
 
 func Broadcast(e *echo.Echo) (string, func(http.ResponseWriter, *http.Request)) {

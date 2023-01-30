@@ -3,8 +3,8 @@ module github.com/yl/echo/example
 go 1.19
 
 require (
-	github.com/redis/go-redis/v9 v9.0.0-rc.4
-	github.com/yl/echo v0.0.0-20230130063736-e289d64ab81f
+	github.com/redis/go-redis/v9 v9.0.1
+	github.com/yl/echo v0.0.0-20230130064023-e39728b95389
 	golang.org/x/exp v0.0.0-20230129154200-a960b3787bd2
 )
 

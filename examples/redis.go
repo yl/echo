@@ -3,11 +3,10 @@ package main
 import (
 	"context"
 	"encoding/json"
-	"golang.org/x/exp/slog"
 
 	"github.com/redis/go-redis/v9"
-
 	"github.com/yl/echo"
+	"golang.org/x/exp/slog"
 )
 
 func Subscribe(e *echo.Echo) {
