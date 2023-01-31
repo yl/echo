@@ -16,7 +16,7 @@ func Broadcast(e *echo.Echo) (string, func(http.ResponseWriter, *http.Request)) 
 			slog.Error("io read error", err)
 			return
 		}
-		message := &echo.Message{}
+		message := &Message{}
 		err = json.Unmarshal(msg, message)
 		if err != nil {
 			slog.Error("json unmarshal error", err, "msg", msg)

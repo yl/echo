@@ -25,7 +25,7 @@ func Subscribe(e *echo.Echo) {
 	for {
 		select {
 		case m := <-sub.Channel():
-			message := &echo.Message{}
+			message := &Message{}
 			if err := json.Unmarshal([]byte(m.Payload), message); err != nil {
 				slog.Error("Message unmarshal error", err)
 				continue
