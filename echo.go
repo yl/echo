@@ -8,6 +8,8 @@ import (
 	"golang.org/x/exp/slog"
 )
 
+type HttpHandleFunc func(*Echo) (string, func(http.ResponseWriter, *http.Request))
+
 type Echo struct {
 	rwmutex  *sync.RWMutex
 	mux      *http.ServeMux
@@ -91,7 +93,7 @@ func (e *Echo) Close(n string) {
 	delete(e.channels, n)
 }
 
-func (e *Echo) HandleHttp(fn func(*Echo) (string, func(http.ResponseWriter, *http.Request))) {
+func (e *Echo) HandleHttp(fn HttpHandleFunc) {
 	e.mux.HandleFunc(fn(e))
 }
 

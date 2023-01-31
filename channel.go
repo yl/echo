@@ -7,23 +7,23 @@ import (
 
 type channel struct {
 	name       string
-	closed     bool
 	sessions   map[*melody.Session]bool
 	enterC     chan *melody.Session
 	leaveC     chan *melody.Session
-	closeC     chan bool
 	broadcastC chan []byte
+	closed     bool
+	closeC     chan bool
 }
 
 func newChannel(n string) *channel {
 	return &channel{
 		name:       n,
-		closed:     false,
 		sessions:   make(map[*melody.Session]bool),
 		enterC:     make(chan *melody.Session),
 		leaveC:     make(chan *melody.Session),
-		closeC:     make(chan bool),
 		broadcastC: make(chan []byte),
+		closed:     false,
+		closeC:     make(chan bool),
 	}
 }
 
@@ -35,12 +35,12 @@ func (c *channel) leave(s *melody.Session) {
 	c.leaveC <- s
 }
 
-func (c *channel) close() {
-	c.closeC <- true
-}
-
 func (c *channel) broadcast(m []byte) {
 	c.broadcastC <- m
+}
+
+func (c *channel) close() {
+	c.closeC <- true
 }
 
 func (c *channel) handleEnter(s *melody.Session) {
@@ -55,8 +55,7 @@ func (c *channel) handleLeave(s *melody.Session) {
 
 func (c *channel) handleBroadcast(m []byte) {
 	for s := range c.sessions {
-		err := s.Write(m)
-		if err != nil {
+		if err := s.Write(m); err != nil {
 			slog.Error("Message broadcast error", err, "channel", c.name, "message", m)
 		}
 	}
