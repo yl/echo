@@ -1,9 +1,10 @@
-package echo
+package main
 
 import (
 	"encoding/json"
 
 	"github.com/olahol/melody"
+	"github.com/yl/echo"
 	"golang.org/x/exp/slog"
 )
 
@@ -24,7 +25,7 @@ type response struct {
 	Result any    `json:"result,omitempty"`
 }
 
-func HandleMessage(e *Echo) func(*melody.Session, []byte) {
+func HandleMessage(e *echo.Echo) func(*melody.Session, []byte) {
 	return func(s *melody.Session, m []byte) {
 		request := &request{}
 		if err := json.Unmarshal(m, request); err != nil {
@@ -57,7 +58,7 @@ func HandleMessage(e *Echo) func(*melody.Session, []byte) {
 	}
 }
 
-func HandleDisconnect(e *Echo) func(session *melody.Session) {
+func HandleDisconnect(e *echo.Echo) func(session *melody.Session) {
 	return func(s *melody.Session) {
 		for n, v := range s.Keys {
 			if exist, ok := v.(bool); ok && exist {

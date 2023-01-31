@@ -60,7 +60,7 @@ func (e *Echo) HandleClose(fn func(*melody.Session, int, string) error) {
 	e.melody.HandleClose(fn)
 }
 
-func (e *Echo) getChannel(n string) *channel {
+func (e *Echo) channel(n string) *channel {
 	e.rwmutex.Lock()
 	defer e.rwmutex.Unlock()
 
@@ -75,17 +75,20 @@ func (e *Echo) getChannel(n string) *channel {
 }
 
 func (e *Echo) Enter(n string, s *melody.Session) {
-	e.getChannel(n).handleEnter(s)
-	s.Set(n, true)
+	e.channel(n).enter(s)
 }
 
 func (e *Echo) Leave(n string, s *melody.Session) {
-	e.getChannel(n).handleLeave(s)
-	s.Set(n, false)
+	e.channel(n).leave(s)
 }
 
 func (e *Echo) Broadcast(n string, m []byte) {
-	e.getChannel(n).handleBroadcast(m)
+	e.channel(n).broadcast(m)
+}
+
+func (e *Echo) Close(n string) {
+	e.channel(n).close()
+	delete(e.channels, n)
 }
 
 func (e *Echo) HandleHttp(fn func(*Echo) (string, func(http.ResponseWriter, *http.Request))) {
@@ -93,9 +96,6 @@ func (e *Echo) HandleHttp(fn func(*Echo) (string, func(http.ResponseWriter, *htt
 }
 
 func (e *Echo) Run(addr string) {
-	e.HandleMessage(HandleMessage(e))
-	e.HandleDisconnect(HandleDisconnect(e))
-
 	e.mux.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		err := e.melody.HandleRequest(w, r)
 		if err != nil {
@@ -105,6 +105,6 @@ func (e *Echo) Run(addr string) {
 
 	err := http.ListenAndServe(addr, e.mux)
 	if err != nil {
-		panic(err)
+		slog.Error("ListenAndServe error", err)
 	}
 }
